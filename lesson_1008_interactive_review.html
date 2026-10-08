@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10/08 ロシア語レッスン（アナスタシア先生）完全攻略ダッシュボード</title>
+<style>
+  :root {
+    --primary: #1976d2;
+    --primary-dark: #0d47a1;
+    --accent: #d32f2f;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --warning: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 60px;
+  }
+  header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+    color: white;
+    padding: 30px 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .container { max-width: 1000px; margin: 0 auto; padding: 0 16px; }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 6px;
+    margin-bottom: 8px;
+  }
+  .badge-blue { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.4); }
+  .badge-gold { background: rgba(245, 158, 11, 0.2); color: #fde68a; border: 1px solid rgba(245, 158, 11, 0.4); }
+  h1 { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+  .subtitle { font-size: 0.95rem; color: #cbd5e1; }
+  
+  /* Tabs */
+  .tab-nav {
+    display: flex;
+    gap: 8px;
+    background: white;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 10px 18px;
+    border: none;
+    background: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { background: #f1f5f9; color: var(--text); }
+  .tab-btn.active { background: #eff6ff; color: var(--primary); border: 1px solid #bfdbfe; }
+
+  /* Tab Content */
+  .tab-pane { display: none; padding: 24px 0; }
+  .tab-pane.active { display: block; }
+
+  /* Cards & Sections */
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Tanabata Reader */
+  .sentence-block {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-bottom: 16px;
+    border-left: 5px solid var(--primary);
+  }
+  .rus-text { font-size: 1.15rem; font-weight: 600; color: #0f172a; margin-bottom: 8px; }
+  .jp-text { font-size: 0.95rem; color: #475569; margin-bottom: 12px; }
+  .grammar-box {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 0.9rem;
+    color: #334155;
+  }
+  .dialog-box {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 0.88rem;
+  }
+  .dialog-title { font-weight: 700; color: #be185d; margin-bottom: 4px; }
+  
+  /* Quiz */
+  .quiz-item {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+  .quiz-q { font-size: 1.05rem; font-weight: 700; margin-bottom: 14px; color: #1e293b; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+  .quiz-btn {
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .quiz-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+  .quiz-btn.correct { background: #dcfce7 !important; border-color: #22c55e !important; color: #15803d !important; }
+  .quiz-btn.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+  .quiz-feedback {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+  
+  /* Tables */
+  table.comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 0.92rem;
+  }
+  table.comp-table th, table.comp-table td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  table.comp-table th { background: #f1f5f9; font-weight: 700; }
+  table.comp-table tr:nth-child(even) { background: #f8fafc; }
+  .accent-red { color: var(--accent); font-weight: 700; }
+
+  /* Anki Cards Grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .flashcard-mini {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .flashcard-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    border-color: #93c5fd;
+  }
+  .fc-rus { font-weight: 700; color: #0f172a; margin-bottom: 6px; font-size: 0.98rem; }
+  .fc-eng { font-size: 0.88rem; color: #475569; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div>
+      <span class="badge badge-gold">2026.10.08 レッスン</span>
+      <span class="badge badge-blue">講師: アナスタシア先生 (Анастасия)</span>
+      <span class="badge badge-blue">CEFR B1 / 2級対策</span>
+    </div>
+    <h1>レッスン完全攻略＆復習インタラクティブ・ダッシュボード</h1>
+    <p class="subtitle">七夕全文解剖・先生の会話シミュレーター・動詞対比ドリル（Задание 1 & 2 全18問）</p>
+  </div>
+</header>
+
+<div class="tab-nav">
+  <div class="container" style="display:flex; gap:8px;">
+    <button class="tab-btn active" onclick="switchTab('tab-tanabata')">🎋 七夕テキスト完全解剖</button>
+    <button class="tab-btn" onclick="switchTab('tab-quiz')">🚗 文法ドリル (全18問)</button>
+    <button class="tab-btn" onclick="switchTab('tab-grammar')">⚡ 先生直伝！アクセント＆活用表</button>
+    <button class="tab-btn" onclick="switchTab('tab-anki')">🗂️ 登録カード全37枚一覧</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TAB 1: TANABATA READER -->
+  <div id="tab-tanabata" class="tab-pane active">
+    <div class="card" style="border-left: 4px solid #f59e0b; background: #fffbeb;">
+      <h3 style="color:#b45309; margin-bottom:6px;">💡 七夕の文章を完全に自分のものにするためのポイント</h3>
+      <p style="font-size:0.92rem; color:#78350f;">
+        レッスンでは時間が限られていたため、七夕の文章を速いテンポで通過してしまいました。ここでは<b>全5段落・全12文</b>を1文ずつ完全に分解し、「文法構造」「格支配」、そして<b>「先生が質問してきたリアルな会話と、どう答えれば満点だったか（模範スピーキング）」</b>を日本語で完全解説しています。
+      </p>
+    </div>
+
+    <!-- Sentence 1 -->
+    <div class="sentence-block">
+      <div class="rus-text">1. Мой любимый японский праздник — Танабата.</div>
+      <div class="jp-text">私の大好きな日本の祝祭は七夕です。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 主語（Мой любимый праздник）と述語名詞（Танабата）がともに主格名詞のため、繋ぎとしてダッシュ（—）が置かれます。自分の文化を紹介する最高のスピーチ導入文です。
+      </div>
+    </div>
+
+    <!-- Sentence 2 -->
+    <div class="sentence-block">
+      <div class="rus-text">2. Это красивый традиционный праздник, который называют праздником звёзд.</div>
+      <div class="jp-text">これは美しい伝統的な祝祭で、「星祭り」と呼ばれています。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: <code>который называют (+造格: праздником звёзд)</code>。「〜を…と呼ぶ」構文では、呼称が<b>造格</b>になります。関係代名詞 <code>который</code> は男性主格・活動体なし（праздник を受ける）。
+      </div>
+    </div>
+
+    <!-- Sentence 3 -->
+    <div class="sentence-block">
+      <div class="rus-text">3. Танабата символизирует любовь, надежду и исполнение желаний.</div>
+      <div class="jp-text">七夕は愛、希望、そして願いの成就を象徴しています。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 動詞 <code>символизирует</code> は直接対格（любовь, надежду）を支配します。<code>исполнение желаний</code> は中性名詞（成就）＋ 複数生格（願いの）。ロシア語検定2級・B1必須の格調高い表現です。
+      </div>
+    </div>
+
+    <!-- Sentence 4 -->
+    <div class="sentence-block">
+      <div class="rus-text">4. Обычно люди отмечают его 7 июля, хотя в некоторых городах праздник проходит в августе.</div>
+      <div class="jp-text">普段、人々はそれを7月7日に祝いますが、一部の都市ではお祭りは8月に行われます。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・日付の表現: 「7月7日に」は順序数詞・月名ともに生格（<b>седьмого июля</b>）。<br>
+        ・イベント開催: <code>праздник проходит в августе</code>（祝祭が行われる / проходи́ть の重要用法）。
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-title">🎙️ アナスタシア先生とのレッスン対話再現</div>
+        <b>先生</b>: «Когда отмечают этот праздник?»<br>
+        <b>🌟 理想の返し</b>: «Обычно люди отмечают его <b>седьмого июля</b>, но у нас в некоторых городах праздник проходит в августе!»
+      </div>
+    </div>
+
+    <!-- Sentence 5 & 6 (Legend) -->
+    <div class="sentence-block">
+      <div class="rus-text">5. История Танабаты связана с древней китайской легендой. Согласно этой легенде, на небе жили две звезды — Орихимэ и Хикобоси.</div>
+      <div class="jp-text">七夕の歴史は、古代中国の伝説と結びついています。この伝説によれば、天の上にはオリヒメとヒコボシという2つの星が住んでいました。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>связана с (+造格: древней китайской легендой)</code>: 「〜と結びついている（短尾形）」<br>
+        ・<b>согласно (+与格: этой легенде)</b>: 2級最頻出！「伝説によれば」。必ず与格をとります。
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-title">🎙️ アナスタシア先生とのレッスン対話再現</div>
+        <b>先生</b>: «Какую легенду вы знаете? Как они назывались?»<br>
+        <b>生徒（ユウスケ様）</b>: «Они... Орихиме и...»<br>
+        <b>🌟 理想の返し</b>: «Согласно древней легенде, на небе жили две звезды — Орихимэ и Хикобоси!»
+      </div>
+    </div>
+
+    <!-- Sentence 7 & 8 -->
+    <div class="sentence-block">
+      <div class="rus-text">6. Они были влюблены друг в друга, но из-за своей любви перестали работать.</div>
+      <div class="jp-text">二人はお互いに深く愛し合っていましたが、自分たちの愛のせいで働くのをやめてしまいました。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>были влюблены друг в друга</code>: 相互代名詞（друг в друга: 間に前置詞 в が入る！）<br>
+        ・<code>из-за своей любви</code>: 不都合な理由「〜のせいで（из-за + 生格）」<br>
+        ・<code>перестали работать</code>: 中止動詞（перестать + 不完了体不定詞）。
+      </div>
+    </div>
+
+    <!-- Sentence 9 & 10 -->
+    <div class="sentence-block">
+      <div class="rus-text">7. Поэтому небесный бог решил разделить их и разрешил им встречаться только один раз в году — 7 июля. Считается, что в этот день они могут встретиться на Млечном Пути.</div>
+      <div class="jp-text">そのため天の神は二人を引き離すことを決め、年にたった1度、7月7日にだけ会うことを許しました。この日、彼らは天の川の上で出会うことができると信じられています。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>разрешил (+与格: им) встречаться</code>: 「彼らに会うことを許した」<br>
+        ・<code>один раз в году</code>: 「年に1度（в + 前置格: году）」<br>
+        ・<code>Считается, что...</code>: 「〜と考えられている（客観的伝承）」<br>
+        ・<b>на Млечном Пути</b>: <code>путь</code> は男性名詞ですが、生格・与格・前置格の語尾がすべて <b>-и</b> になる不規則変化！
+      </div>
+    </div>
+
+    <!-- Sentence 11 & 12 -->
+    <div class="sentence-block">
+      <div class="rus-text">8. В Японии Танабата появился много веков назад благодаря китайской традиции. Со временем японцы добавили свои традиции и создали особый праздник.</div>
+      <div class="jp-text">日本で七夕は何世紀も前に中国の伝統のおかげで伝来しました。時が経つにつれて日本人は独自の伝統を付け加え、特別な祝祭を作り上げました。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<b>благодаря (+与格: китайской традиции)</b>: 好ましい原因「〜のおかげで」。必ず与格！<br>
+        ・<code>со временем</code>: 「時が経つにつれて（副詞句）」
+      </div>
+    </div>
+
+    <!-- Sentence 13 & 14 (Tanzaku & Bamboo) -->
+    <div class="sentence-block">
+      <div class="rus-text">9. В этот день люди пишут свои желания на маленьких цветных листочках бумаги, которые называются танзаку. Потом они вешают эти листочки на ветки бамбука.</div>
+      <div class="jp-text">この日、人々は短冊と呼ばれる小さな色紙に願い事を書きます。それからその紙片を竹の枝に吊るします。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>писать на (+前置格: листочках бумаги)</code>: 紙片の上に書く<br>
+        ・<code>вешают эти листочки на (+対格: ветки бамбука)</code>: 吊るす方向を表すため <b>на + 対格</b>。
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-title">🎙️ アナスタシア先生とのレッスン対話再現</div>
+        <b>先生</b>: «Куда люди вешают эти листочки?»<br>
+        <b>生徒（ユウスケ様）</b>: «Они вешают эти листочки на ветки бамбука!»<br>
+        <b>先生</b>: «Правильно, бамбука!»
+      </div>
+    </div>
+
+    <!-- Sentence 15 & 16 (Costume & Celebration) -->
+    <div class="sentence-block">
+      <div class="rus-text">10. Во многих городах проходят красивые фестивали Танабаты. Улицы украшают большими цветными декорациями, а люди надевают традиционную одежду, например юкату.</div>
+      <div class="jp-text">多くの都市で美しい七夕祭りが開催されます。通りは大きな色とりどりの飾りで装飾され、人々は例えば浴衣のような伝統的な衣装を身にまといます。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>украшают (+対格: улицы) (+造格: цветными декорациями)</code>: 〜を〜で飾る<br>
+        ・<code>надевают традиционную одежду</code>: 身につける動作（надевать）。着用している状態（носить）との対比。
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-title">🎙️ アナスタシア先生とのレッスン対話再現</div>
+        <b>先生</b>: «Какую одежду носят японцы в этот день?»<br>
+        <b>生徒（ユウスケ様）</b>: «Люди надевают традиционные... одежду, например юкату.»<br>
+        <b>先生</b>: «Да, вот-вот-вот! Отлично!»
+      </div>
+    </div>
+
+    <!-- Sentence 17 & 18 (Conclusion) -->
+    <div class="sentence-block">
+      <div class="rus-text">11. Он напоминает людям, что важно мечтать и верить в свои желания. Люди украшают улицы, проводят время вместе и радуются лету.</div>
+      <div class="jp-text">七夕は人々に、夢を見ることや自分の願いを信じることが大切だと気付かせてくれます。人々は通りを飾り、一緒に時を過ごし、夏を心から楽しむのです。</div>
+      <div class="grammar-box">
+        <b>🔍 文法解説</b>: 
+        ・<code>напоминает (+与格: людям), что...</code>: 人々に〜を思い出させる<br>
+        ・<b>верить в (+対格: свои желания)</b>: 理想や夢を信じる場合は必ず <b>в + 対格</b>！<br>
+        ・<b>радуются (+与格: лету)</b>: 感情の対象「夏を喜ぶ」。лето の与格は <b>лету</b>。
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: INTERACTIVE QUIZ -->
+  <div id="tab-quiz" class="tab-pane">
+    <div class="card" style="border-left: 4px solid var(--primary); background: #eff6ff;">
+      <h3 style="color:var(--primary-dark); margin-bottom:6px;">🚗 レッスン実戦ドリル (Задание 1 & 2 全18問)</h3>
+      <p style="font-size:0.92rem; color:#1e40af;">
+        授業で実際に解いた問題をそのままインタラクティブクイズにしました！選択肢をクリックすると、即座に正誤判定と<b>「アナスタシア先生の解説（なぜ НСВ/СВ なのか・アクセント位置）」</b>が表示されます。
+      </p>
+    </div>
+
+    <div id="quiz-container">
+      <!-- Quiz Items Generated via JS -->
+    </div>
+  </div>
+
+  <!-- TAB 3: GRAMMAR & ACCENT CHEAT SHEET -->
+  <div id="tab-grammar" class="tab-pane">
+    <div class="card">
+      <div class="card-title">🚗 動詞の絶対的コア概念: Transportation vs Handing</div>
+      <p style="font-size:0.95rem; margin-bottom:12px;">
+        アナスタシア先生がレッスン冒頭で熱血指導された核心ルールです：<br>
+        <b style="color:var(--accent); font-size:1.05rem;">«It's never ever will be like handing! It's always will be by transportation!»</b>
+      </p>
+      <div style="background:#f1f5f9; padding:14px; border-radius:8px; font-size:0.9rem; line-height:1.7;">
+        ・<b>привозить / привезти</b>: 車、トラック、電車、飛行機などの<b>乗り物（交通手段）に乗せて運んでくる</b>場合にしか絶対に使えない！<br>
+        ・<b>приносить / принести</b>: （次回テーマ）自分の足で歩き、<b>手で持って（handing）運んでくる</b>場合。<br>
+        ※ この対比をしっかりイメージで脳内に固定することが、ロシア語の移動動詞完全制覇の第一歩です。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚡ 先生直伝！アクセントの位置法則（全比較表）</div>
+      <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:12px;">
+        先生が「Всегда на О!」「Всегда на Е(Ё)!」と受講生に繰り返し唱えさせたアクセントの絶対法則です。
+      </p>
+
+      <table class="comp-table">
+        <tr>
+          <th>項目</th>
+          <th>привозить (НСВ: 習慣・反復)</th>
+          <th>привезти (СВ: 完了・結果)</th>
+        </tr>
+        <tr>
+          <td><b>アクセント原則</b></td>
+          <td><b>1人称以外は «Всегда на О!»</b> (語幹固定)</td>
+          <td><b>1人称以外は «Всегда на Е(Ё)!»</b> (語尾固定)</td>
+        </tr>
+        <tr>
+          <td><b>я</b></td>
+          <td>привож<span class="accent-red">у</span> (з→ж 音転換 / 語尾アクセント)</td>
+          <td>привез<span class="accent-red">у</span> (語尾アクセント)</td>
+        </tr>
+        <tr>
+          <td><b>ты</b></td>
+          <td>прив<span class="accent-red">о</span>зишь</td>
+          <td>привез<span class="accent-red">ёшь</span></td>
+        </tr>
+        <tr>
+          <td><b>он / она</b></td>
+          <td>прив<span class="accent-red">о</span>зит</td>
+          <td>привез<span class="accent-red">ёт</span></td>
+        </tr>
+        <tr>
+          <td><b>мы</b></td>
+          <td>прив<span class="accent-red">о</span>зим</td>
+          <td>привез<span class="accent-red">ём</span></td>
+        </tr>
+        <tr>
+          <td><b>вы</b></td>
+          <td>прив<span class="accent-red">о</span>зите</td>
+          <td>привез<span class="accent-red">ёте</span></td>
+        </tr>
+        <tr>
+          <td><b>они</b></td>
+          <td>прив<span class="accent-red">о</span>зят</td>
+          <td>привез<span class="accent-red">ут</span></td>
+        </tr>
+        <tr>
+          <td><b>過去形 (男)</b></td>
+          <td>привоз<span class="accent-red">ил</span></td>
+          <td>прив<span class="accent-red">ёз</span> (<b>※ л が脱落して ё にアクセント！</b>)</td>
+        </tr>
+        <tr>
+          <td><b>過去形 (女)</b></td>
+          <td>привоз<span class="accent-red">ила</span></td>
+          <td>привезл<span class="accent-red">а</span> (語尾 -а にアクセント！)</td>
+        </tr>
+        <tr>
+          <td><b>過去形 (複)</b></td>
+          <td>привоз<span class="accent-red">или</span></td>
+          <td>привезл<span class="accent-red">и</span> (語尾 -и にアクセント！)</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏢 重要単語の急所: оборудование & путь</div>
+      <div style="font-size:0.92rem; line-height:1.7;">
+        ・<b>оборудование (設備・機材)</b>:<br>
+        　- 英語の <code>equipment</code> と同じ集合名詞（常に単数中性扱い）。<br>
+        　- アクセントは第3音節の <b>-у́-</b>（обо-ру́-до-ва-ни-е）。先生が何度も発音をチェックされた単語！<br><br>
+        ・<b>путь (道 / Млечный Путь: 天の川)</b>:<br>
+        　- <b>男性名詞</b>であるにもかかわらず、生格・与格・前置格の語尾がすべて <b>-и</b> になる不規則変化！<br>
+        　- 「天の川で」＝ <code>на Млечном Пути</code>（※ Путе とは絶対にならない）。
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: ANKI CARDS EXPLORER -->
+  <div id="tab-anki" class="tab-pane">
+    <div class="card">
+      <div class="card-title">🗂️ 本日登録された Anki カード（全37枚）</div>
+      <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:12px;">
+        七夕の全構文を網羅した追加13枚を含め、全37枚がすでに Anki（`02.Russian::ロシア語レッスン2`）および AnkiWeb クラウドに同期されています。
+      </p>
+      <input type="text" id="anki-search" placeholder="単語や日本語訳で検索..." onkeyup="filterCards()" style="width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; margin-bottom:14px;">
+      
+      <div class="card-grid" id="cards-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(tabId) {
+  document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// Quiz Data from Lesson (Задание 1 & Задание 2)
+const quizData = [
+  // Задание 1
+  {
+    q: "1. Я обычно ___ продукты из супермаркета по субботам.",
+    options: ["а) привожу", "б) привезу"],
+    correct: 0,
+    exp: "<b>正解: а) привожу (НСВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «обычно»（普段は）＋ «по субботам»（毎週土曜日に）は反復・習慣の指標です。したがって不完了体 НСВ を選びます。アクセントは «я привожу́»（-у にアクセント）。"
+  },
+  {
+    q: "2. Завтра я ___ тебе документы.",
+    options: ["а) привожу", "б) привезу"],
+    correct: 1,
+    exp: "<b>正解: б) привезу (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «Завтра!» 明日の1回限りの配達・結果の成立を表すため、完了体未来 СВ を選択します。"
+  },
+  {
+    q: "3. Мой брат часто ___ мне подарки из путешествий.",
+    options: ["а) привозит", "б) привезёт"],
+    correct: 0,
+    exp: "<b>正解: а) привозит (НСВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «часто»（しばしば・頻繁に）があるので反復動作。НСВ の «привозит» です。アクセントは <b>всегда на О!</b>（приво́зит）。"
+  },
+  {
+    q: "4. Вчера он ___ из Украины домашние продукты.",
+    options: ["а) привозил", "б) привёз"],
+    correct: 1,
+    exp: "<b>正解: б) привёз (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «Вчера... один раз!» 昨日の1回の完了行為なので СВ過去形。男性形は接尾辞 -л が脱落して <b>привёз</b> となります！"
+  },
+  {
+    q: "5. Когда ты ___ мебель в новую квартиру?",
+    options: ["а) привозишь", "б) привезёшь"],
+    correct: 1,
+    exp: "<b>正解: б) привезёшь (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: 新居への家具の搬入は1回の結果の達成を尋ねています。СВ未来形の «привезёшь»（語尾 -ёшь にアクセント）。"
+  },
+  {
+    q: "6. Мы каждый год ___ сувениры друзьям.",
+    options: ["а) привозим", "б) привезём"],
+    correct: 0,
+    exp: "<b>正解: а) привозим (НСВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «каждый год»（毎年）＝定期反復の決定打！迷わず НСВ の «привозим»（アクセントは О!）。"
+  },
+  {
+    q: "7. Я уже ___ всё необходимое для ремонта.",
+    options: ["а) привозил", "б) привёз"],
+    correct: 1,
+    exp: "<b>正解: б) привёз (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «уже»（すでに）＋ 結果の到達なので СВ過去形 «привёз»。"
+  },
+  {
+    q: "8. Она регулярно ___ детям книги.",
+    options: ["а) привозит", "б) привезёт"],
+    correct: 0,
+    exp: "<b>正解: а) привозит (НСВ)</b><br>💡 <b>アナスタシア先生の解説</b>: «регулярно»（定期的に）＝ НСВ の «привозит»。"
+  },
+  {
+    q: "9. — Ты можешь завтра ___ мне кофе? — Конечно!",
+    options: ["а) привозить", "б) привезти"],
+    correct: 1,
+    exp: "<b>正解: б) привезти (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: 明日1回持ってきてくれるかという完了体の依頼なので、不定詞は СВ の «привезти»。"
+  },
+  {
+    q: "10. В прошлом месяце они ___ новую мебель из Италии.",
+    options: ["а) привозили", "б) привезли"],
+    correct: 1,
+    exp: "<b>正解: б) привезли (СВ)</b><br>💡 <b>アナスタシア先生の解説</b>: 先月イタリアから家具を買い付けて運び込んだ1回の完了結果なので СВ過去形 «привезли»。"
+  },
+
+  // Задание 2
+  {
+    q: "11. Каждый месяц я ___ маме лекарства. (動詞の形は？)",
+    options: ["привожу", "привезу", "привозит"],
+    correct: 0,
+    exp: "<b>正解: привожу</b><br>💡 <b>アナスタシア先生の解説</b>: «Каждый месяц» ＝ НСВ。主語は «я» なので、子音交替（з→ж）が起きて «я привожу́» となります。"
+  },
+  {
+    q: "12. Завтра мы ___ продукты на дачу.",
+    options: ["привозим", "привезём", "привезли"],
+    correct: 1,
+    exp: "<b>正解: привезём</b><br>💡 <b>アナスタシア先生の解説</b>: «Завтра мы» ＝ СВ未来形の1人称複数。語尾 -ём にアクセントが置かれ «привезём»。"
+  },
+  {
+    q: "13. Он часто ___ с собой друзей из Москвы.",
+    options: ["привозит", "привезёт", "привозил"],
+    correct: 0,
+    exp: "<b>正解: привозит</b><br>💡 <b>アナスタシア先生の解説</b>: «часто» ＝ НСВ。主語 он なので «приво́зит»（アクセントは О!）。車で連れてくるという意味になります。"
+  },
+  {
+    q: "14. Вчера она ___ из поездки много сувениров.",
+    options: ["привозила", "привезла", "привёз"],
+    correct: 1,
+    exp: "<b>正解: привезла</b><br>💡 <b>アナスタシア先生の解説</b>: «Вчера она» ＝ 女性単数のСВ過去形。語尾 -а にアクセントが移動して «привезла́»！"
+  },
+  {
+    q: "15. Когда вы ___ оборудование?",
+    options: ["привозите", "привезёте", "привезли"],
+    correct: 1,
+    exp: "<b>正解: привезёте</b><br>💡 <b>アナスタシア先生の解説</b>: 機材（оборудование）をいつ搬入完了するかを尋ねるため СВ未来形の вы。「привезёте」となります。"
+  },
+  {
+    q: "16. Мы обычно ___ из Франции сыр и сладости.",
+    options: ["привозим", "привезём", "привозили"],
+    correct: 0,
+    exp: "<b>正解: привозим</b><br>💡 <b>アナスタシア先生の解説</b>: «обычно» ＝ 習慣なので НСВ の «приво́зим»。"
+  },
+  {
+    q: "17. Я уже ___ все документы.",
+    options: ["привозил", "привёз", "привезу"],
+    correct: 1,
+    exp: "<b>正解: привёз</b><br>💡 <b>アナスタシア先生の解説</b>: «уже» ＝ 到達結果。男性単数過去形は -л が脱落して «привёз»！"
+  },
+  {
+    q: "18. Летом они часто ___ фрукты с дачи.",
+    options: ["привозят", "привезут", "привозили"],
+    correct: 0,
+    exp: "<b>正解: привозят</b><br>💡 <b>アナスタシア先生の解説</b>: «Летом они часто» ＝ 反復なので НСВ。3人称複数は «приво́зят»（всегда на О!）。別荘からは «с дачи» です。"
+  }
+];
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = quizData.map((item, qIdx) => `
+    <div class="quiz-item" id="q-item-${qIdx}">
+      <div class="quiz-q">${item.q}</div>
+      <div class="quiz-options">
+        ${item.options.map((opt, optIdx) => `
+          <button class="quiz-btn" onclick="checkAnswer(${qIdx}, ${optIdx})">${opt}</button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="fb-${qIdx}"></div>
+    </div>
+  `).join('');
+}
+
+function checkAnswer(qIdx, selectedOptIdx) {
+  const item = quizData[qIdx];
+  const qElem = document.getElementById(`q-item-${qIdx}`);
+  const buttons = qElem.querySelectorAll('.quiz-btn');
+  const fb = document.getElementById(`fb-${qIdx}`);
+  
+  buttons.forEach(b => b.disabled = true);
+  
+  if (selectedOptIdx === item.correct) {
+    buttons[selectedOptIdx].classList.add('correct');
+    fb.style.display = 'block';
+    fb.style.background = '#dcfce7';
+    fb.style.border = '1px solid #86efac';
+    fb.style.color = '#15803d';
+    fb.innerHTML = `🎉 <b>正解！</b><br>${item.exp}`;
+  } else {
+    buttons[selectedOptIdx].classList.add('wrong');
+    buttons[item.correct].classList.add('correct');
+    fb.style.display = 'block';
+    fb.style.background = '#fee2e2';
+    fb.style.border = '1px solid #fca5a5';
+    fb.style.color = '#991b1b';
+    fb.innerHTML = `❌ <b>惜しい！</b><br>${item.exp}`;
+  }
+}
+
+// 37 Cards Data
+const cardsData = [
+  { rus: "привозить / привезти", eng: "（乗り物で）運んでくる・持ってくる [+対格, +из/с生格]" },
+  { rus: "привозить", eng: "（乗り物で）運んでくる・持ってくる・連れてくる [+対格, +из/с]" },
+  { rus: "привезти", eng: "（乗り物で）運んでくる・持ってくる・連れてくる [+対格, +из/с生格]" },
+  { rus: "я привожу, ты привозишь", eng: "私は運んでくる、君は運んでくる [現在: яは-у, 2人称以降は語幹-о-固定]" },
+  { rus: "я привезу, ты привезёшь", eng: "私は運んでくるだろう、君は運んでくるだろう [未来: 語尾-ё-固定 / 過去: привёз]" },
+  { rus: "Папа регулярно привозит мне книги из деревни.", eng: "父は定期的に村から私に本を運んできてくれます。" },
+  { rus: "Они часто привозят с дачи свежие овощи и ягоды.", eng: "彼らは頻繁に別荘（ダチャ）から新鮮な野菜や果物を運んできます。" },
+  { rus: "Завトラ курьер привезёт нам важные документы прямо в офис.", eng: "明日、配達員が私たちに重要書類を届けてくれる予定です。" },
+  { rus: "Друзья обещали привезти редкие сувениры из поездки.", eng: "友人たちは旅行から珍しいお土産を持ち帰ると約束しました。" },
+  { rus: "Мы каждый год привозим из отпуска много фотографий и подарков.", eng: "私たちは毎年、休暇から多くの写真とお土産を持ち帰ります。" },
+  { rus: "Вчера рабочие привезли всё необходимое для ремонта.", eng: "昨日、作業員たちがリフォームに必要なすべてを運んできました。" },
+  { rus: "Машина уже привезла новое оборудование на склад.", eng: "トラックがすでに新しい設備を倉庫に運んできました。" },
+  { rus: "оборудование", eng: "設備・機材・装置 (中性名詞・集合名詞・常に単数扱い)" },
+  { rus: "всё необходимое", eng: "必要なすべてのもの・一切の必需品 [+для 生格: 〜のための]" },
+  { rus: "Мой любимый японский праздник — Танабата.", eng: "私の大好きな日本の祝祭は七夕です。" },
+  { rus: "символизировать", eng: "象徴する・表している [+対格: 愛・希望・願いの成就などを]" },
+  { rus: "исполнение желаний", eng: "願いの成就・夢の実現 (中性名詞 + 生格複数)" },
+  { rus: "отмечать праздник седьмого июля", eng: "7月7日に祝祭（記念日）を祝う [+生格: 日付]" },
+  { rus: "связано с древней легендой", eng: "古代の伝説に結びついている・由来している [связан + с 造格]" },
+  { rus: "согласно этой легенде", eng: "この伝説によれば・伝説に従えば [согласно + 与格]" },
+  { rus: "были влюблены друг в друга", eng: "お互いに恋していた・互いに愛し合っていた [друг в друга]" },
+  { rus: "Млечный Путь", eng: "天の川・銀河系 (男性名詞) [на Млечном Пути: 天の川で]" },
+  { rus: "вешать листочки на ветки бамбука", eng: "（短冊の）紙片を竹の枝に吊るす [+対格, +на対格]" },
+  { rus: "украшать цветными декорациями", eng: "色とりどりの飾りで装飾する [+対格, +造格]" },
+  { rus: "праздник проходит в августе", eng: "祝祭（お祭り）は8月に開催される・催される [+в前置格]" },
+  { rus: "из-за своей любви перестали работать", eng: "愛のせいで働くのをやめた [из-за + 生格, перестать + 不定詞]" },
+  { rus: "разрешил им встречаться один раз в году", eng: "年に1度だけ会うことを許した [разрешить + 与格 + 不定詞]" },
+  { rus: "Считается, что...", eng: "〜と考えられている・〜と信じられている [客観的見解]" },
+  { rus: "появился благодаря китайской традиции", eng: "中国の伝統のおかげで伝来した [благодаря + 与格]" },
+  { rus: "со временем", eng: "時が経つにつれて・やがて・次第に (時間副詞句)" },
+  { rus: "писать желания на листочках бумаги", eng: "紙片（短冊）に願い事を書く [+на前置格, +対格]" },
+  { rus: "не только..., но и...", eng: "〜だけでなく、〜もまた (相関接続詞構文)" },
+  { rus: "Дети и взрослые надеются, что их желания исполнятся.", eng: "子どもも大人も、自分の願いが叶うことを望んでいます。" },
+  { rus: "надевать традиционную одежду", eng: "伝統的な衣装（服）を着る・身につける [+対格]" },
+  { rus: "напоминать людям, что...", eng: "人々に〜を思い出させる [напоминать + 与格, что...]" },
+  { rus: "верить в свои желания", eng: "自分の願いを信じる・夢を信じる [верить в + 対格]" },
+  { rus: "радоваться лету", eng: "夏を喜ぶ・夏の訪れを楽しむ [радоваться + 与格]" }
+];
+
+function renderCards(filterText = '') {
+  const grid = document.getElementById('cards-grid');
+  const filtered = cardsData.filter(c => 
+    c.rus.toLowerCase().includes(filterText.toLowerCase()) || 
+    c.eng.toLowerCase().includes(filterText.toLowerCase())
+  );
+  grid.innerHTML = filtered.map((c, idx) => `
+    <div class="flashcard-mini">
+      <div class="fc-rus">${c.rus}</div>
+      <div class="fc-eng">${c.eng}</div>
+    </div>
+  `).join('');
+}
+
+function filterCards() {
+  const query = document.getElementById('anki-search').value;
+  renderCards(query);
+}
+
+// Init
+renderQuiz();
+renderCards();
+</script>
+
+</body>
+</html>

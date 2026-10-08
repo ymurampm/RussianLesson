@@ -1,0 +1,21 @@
+# Ignore all recordings and transcripts
+lessonrecording/
+*.m4a
+*.mp3
+*.txt
+
+# Ignore all Python scripts and internal data
+*.py
+*.pyc
+__pycache__/
+*.log
+
+# Ignore all internal JSON files (except data/ directory)
+*.json
+!data/*.json
+!data/lessons.json
+!data/lesson_*.json
+
+# OS and scratch
+.DS_Store
+Thumbs.db

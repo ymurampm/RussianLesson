@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ロシア語レッスン完全攻略＆復習ダッシュボード</title>
+<!-- Google Fonts: Inter, PT Sans (Cyrillic optimized), Roboto -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=PT+Sans:ital,wght@0,400;0,700;1,400&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1d4ed8;
+    --primary-light: #eff6ff;
+    --primary-border: #bfdbfe;
+    --accent: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 70px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Russian Typography: Pure Cyrillic, clean natural spacing, strictly no monospace */
+  .ru-text, .ru-word, .ru-chip, code {
+    font-family: 'PT Sans', 'Roboto', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    letter-spacing: 0 !important;
+    word-spacing: normal !important;
+  }
+  .ru-chip, code {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #0f172a;
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    margin: 1px 2px;
+    font-size: 0.94em;
+    vertical-align: baseline;
+  }
+
+  /* Audio button */
+  .tts-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #334155;
+    cursor: pointer;
+    margin-left: 6px;
+    vertical-align: middle;
+    transition: all 0.15s ease;
+    font-size: 0.8rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .tts-btn:hover {
+    background: #eff6ff;
+    color: var(--primary);
+    border-color: #93c5fd;
+    transform: scale(1.08);
+  }
+  .tts-btn:active { transform: scale(0.95); }
+  .tts-btn.playing {
+    background: #dbeafe;
+    color: var(--primary);
+    border-color: var(--primary);
+    animation: pulse 1s infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.4); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 78, 216, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0); }
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #091e42 0%, #1e3a8a 100%);
+    color: white;
+    padding: 24px 20px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  }
+  .container { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .badge-gold { background: rgba(245, 158, 11, 0.25); color: #fef08a; border: 1px solid rgba(245, 158, 11, 0.5); }
+  .badge-blue { background: rgba(59, 130, 246, 0.25); color: #bfdbfe; border: 1px solid rgba(59, 130, 246, 0.4); }
+  
+  .lesson-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,255,255,0.12);
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .lesson-select-wrapper label { font-size: 0.85rem; color: #cbd5e1; font-weight: 500; }
+  .lesson-select {
+    background: white;
+    color: #0f172a;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  h1 { font-size: 1.65rem; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.02em; }
+  .subtitle { font-size: 0.92rem; color: #cbd5e1; }
+
+  /* Speed Control */
+  .audio-settings {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    color: #94a3b8;
+  }
+  .speed-chip {
+    cursor: pointer;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+  .speed-chip.active { background: #3b82f6; font-weight: 700; }
+
+  /* Navigation Bar */
+  .tab-nav {
+    display: flex;
+    gap: 8px;
+    background: white;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    overflow-x: auto;
+  }
+  .tab-btn {
+    padding: 9px 16px;
+    border: none;
+    background: none;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-radius: 8px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { background: #f1f5f9; color: var(--text); }
+  .tab-btn.active { background: var(--primary-light); color: var(--primary); border: 1px solid var(--primary-border); }
+
+  /* Tab Panes */
+  .tab-pane { display: none; padding: 22px 0; }
+  .tab-pane.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Deep Analysis Sentence Block */
+  .sentence-block {
+    background: white;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 22px;
+    margin-bottom: 22px;
+    border-left: 6px solid var(--primary);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    transition: box-shadow 0.15s ease;
+  }
+  .sentence-block:hover { box-shadow: 0 6px 16px rgba(0,0,0,0.06); }
+  .sentence-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+  .rus-text-lg { font-size: 1.25rem; font-weight: 700; color: #0f172a; line-height: 1.5; }
+  .jp-text { font-size: 1rem; color: #334155; margin-bottom: 16px; font-weight: 500; }
+
+  /* Sub-sections within sentence block */
+  .section-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label-blue { color: #1d4ed8; }
+  .section-label-green { color: #047857; }
+  .section-label-purple { color: #7c3aed; }
+  .section-label-pink { color: #be185d; }
+
+  /* Word Breakdown Grid */
+  .words-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .word-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    transition: all 0.15s ease;
+  }
+  .word-card:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+  }
+  .word-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .word-ru {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 1rem;
+  }
+  .word-pos {
+    font-size: 0.72rem;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .word-desc { color: #475569; line-height: 1.45; font-size: 0.84rem; }
+
+  /* Grammar & Derivation Boxes */
+  .grammar-box-deep {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.92rem;
+    color: #1e293b;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .derivation-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    color: #166534;
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+  .derivation-box ul { list-style-type: none; }
+  .derivation-box li { margin-bottom: 6px; }
+  .derivation-box li:last-child { margin-bottom: 0; }
+
+  .dialog-box {
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* Quiz Items */
+  .quiz-item {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .quiz-q-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .quiz-q { font-size: 1.05rem; font-weight: 700; color: #1e293b; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .quiz-btn {
+    text-align: left;
+    padding: 12px 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: white;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .quiz-btn:hover { background: #f8fafc; border-color: #94a3b8; }
+  .quiz-btn.correct { background: var(--success-bg) !important; border-color: #22c55e !important; color: #15803d !important; }
+  .quiz-btn.wrong { background: #fee2e2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+  .quiz-feedback {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+
+  /* Table styling */
+  table.comp-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.92rem; }
+  table.comp-table th, table.comp-table td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+  table.comp-table th { background: #f1f5f9; font-weight: 700; }
+  table.comp-table tr:nth-child(even) { background: #f8fafc; }
+  .accent-red { color: var(--accent); font-weight: 700; }
+
+  /* Anki Card Grid */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .flashcard-mini {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+  .flashcard-mini:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    border-color: #93c5fd;
+  }
+  .fc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .fc-rus { font-weight: 700; color: #0f172a; font-size: 1.02rem; padding-right: 6px; }
+  .fc-eng { font-size: 0.88rem; color: #475569; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="header-top">
+      <div>
+        <span class="badge badge-gold" id="header-badge-date">2026.10.08 レッスン</span>
+        <span class="badge badge-blue" id="header-badge-teacher">担当: アナスタシア先生 (Анаスタсия)</span>
+      </div>
+      <div class="lesson-select-wrapper">
+        <label for="lessonSelect">📅 レッスン切替:</label>
+        <select id="lessonSelect" class="lesson-select" onchange="changeLesson(this.value)">
+          <option value="20261008" selected>10/08: 七夕伝説 & привозить/привезти</option>
+        </select>
+      </div>
+    </div>
+    <h1 id="header-title">レッスン完全攻略＆復習インタラクティブ・ダッシュボード</h1>
+    <p class="subtitle" id="header-subtitle">全単語分解・文法構造・学びの派生・全テキスト音声再生（🔊）・実戦ドリル</p>
+    
+    <div class="audio-settings">
+      <span>🔊 ロシア語音声再生速度:</span>
+      <span class="speed-chip" onclick="setSpeed(0.8, this)">0.8x (ゆっくり)</span>
+      <span class="speed-chip active" onclick="setSpeed(0.9, this)">0.9x (標準)</span>
+      <span class="speed-chip" onclick="setSpeed(1.0, this)">1.0x (ナチュラル)</span>
+    </div>
+  </div>
+</header>
+
+<div class="tab-nav">
+  <div class="container" style="display:flex; gap:8px;">
+    <button class="tab-btn active" onclick="switchTab('tab-tanabata', this)">🎋 七夕テキスト超高密度解剖 (全単語分解・音声付)</button>
+    <button class="tab-btn" onclick="switchTab('tab-quiz', this)">🚗 文法ドリル全18問 (音声付)</button>
+    <button class="tab-btn" onclick="switchTab('tab-grammar', this)">⚡ 先生直伝！アクセント＆活用表</button>
+    <button class="tab-btn" onclick="switchTab('tab-anki', this)">🗂️ 登録カード全37枚一覧 (音声付)</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- TAB 1: TANABATA READER -->
+  <div id="tab-tanabata" class="tab-pane active">
+    <div class="card" style="border-left: 4px solid #f59e0b; background: #fffbeb;">
+      <h3 style="color:#b45309; margin-bottom:6px;">💡 七夕の文章を一行残らず完全制覇するための徹底解剖</h3>
+      <p style="font-size:0.92rem; color:#78350f;">
+        テキストに登場する<b>すべての単語（品詞・原形・格変化・アクセント）</b>を分解し、<b>文法構造の深掘り</b>、<b>「学びの派生（関連コロケーション、B1/2級での言い換え、英語対比）」</b>、そして<b>「先生のリアル対話再現＆満点の返し」</b>を1文ごとに凝縮しました。各単語や文の <b>🔊 ボタン</b> で発音を何度も確認できます。
+      </p>
+    </div>
+
+    <div id="tanabata-list">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- TAB 2: INTERACTIVE QUIZ -->
+  <div id="tab-quiz" class="tab-pane">
+    <div class="card" style="border-left: 4px solid var(--primary); background: #eff6ff;">
+      <h3 style="color:#1e40af; margin-bottom:6px;">🚗 レッスン実戦ドリル (Задание 1 & 2 全18問)</h3>
+      <p style="font-size:0.92rem; color:#1e40af;">
+        授業で解いた問題をそのままインタラクティブクイズにしました！問題文の <b>🔊 ボタン</b> で音声を聞き、選択肢をクリックすると即座に正誤判定と<b>アナスタシア先生の解説（всегда на О, transportation vs handing など）</b>が表示されます。
+      </p>
+    </div>
+
+    <div id="quiz-container">
+      <!-- Generated via JS -->
+    </div>
+  </div>
+
+  <!-- TAB 3: GRAMMAR & ACCENT CHEAT SHEET -->
+  <div id="tab-grammar" class="tab-pane">
+    <div class="card">
+      <div class="card-title">
+        <span>🚗 動詞の絶対的コア概念: Transportation vs Handing</span>
+        <button class="tts-btn" onclick="speakRussian('привозить или привезти всегда на транспорте, никогда не руками')">🔊</button>
+      </div>
+      <p style="font-size:0.95rem; margin-bottom:12px;">
+        アナスタシア先生がレッスン冒頭で熱血指導された核心ルールです：<br>
+        <b style="color:var(--accent); font-size:1.05rem;">«It's never ever will be like handing! It's always will be by transportation!»</b>
+      </p>
+      <div style="background:#f1f5f9; padding:14px; border-radius:8px; font-size:0.9rem; line-height:1.7;">
+        ・<span class="ru-chip">привозить / привезти</span>: 車、トラック、電車、飛行機などの<b>乗り物（交通手段）に乗せて運んでくる</b>場合にしか絶対に使えない！<br>
+        ・<span class="ru-chip">приносить / принести</span>: （次回テーマ）自分の足で歩き、<b>手で持って（handing）運んでくる</b>場合。<br>
+        ※ この対比をしっかりイメージで脳内に固定することが、ロシア語の移動動詞完全制覇の第一歩です。
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚡ 先生直伝！アクセントの位置法則（全比較表）</div>
+      <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:12px;">
+        先生が「Всегда на О!」「Всегда на Е(Ё)!」と受講生に繰り返し唱えさせたアクセントの絶対法則です。各行の 🔊 を押すと発音を確認できます。
+      </p>
+
+      <table class="comp-table">
+        <tr>
+          <th>人称</th>
+          <th>привозить (НСВ: 習慣・反復) <button class="tts-btn" onclick="speakRussian('привозить')">🔊</button></th>
+          <th>привезти (СВ: 完了・結果) <button class="tts-btn" onclick="speakRussian('привезти')">🔊</button></th>
+        </tr>
+        <tr>
+          <td><b>アクセント原則</b></td>
+          <td><b>1人称以外は «Всегда на О!»</b> (語幹固定)</td>
+          <td><b>1人称以外は «Всегда на Е(Ё)!»</b> (語尾固定)</td>
+        </tr>
+        <tr>
+          <td><b>я</b></td>
+          <td>привож<span class="accent-red">у</span> <button class="tts-btn" onclick="speakRussian('я привожу')">🔊</button></td>
+          <td>привез<span class="accent-red">у</span> <button class="tts-btn" onclick="speakRussian('я привезу')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>ты</b></td>
+          <td>прив<span class="accent-red">о</span>зишь <button class="tts-btn" onclick="speakRussian('ты привозишь')">🔊</button></td>
+          <td>привез<span class="accent-red">ёшь</span> <button class="tts-btn" onclick="speakRussian('ты привезёшь')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>он / она</b></td>
+          <td>прив<span class="accent-red">о</span>зит <button class="tts-btn" onclick="speakRussian('он привозит')">🔊</button></td>
+          <td>привез<span class="accent-red">ёт</span> <button class="tts-btn" onclick="speakRussian('он привезёт')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>мы</b></td>
+          <td>прив<span class="accent-red">о</span>зим <button class="tts-btn" onclick="speakRussian('мы привозим')">🔊</button></td>
+          <td>привез<span class="accent-red">ём</span> <button class="tts-btn" onclick="speakRussian('мы привезём')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>вы</b></td>
+          <td>прив<span class="accent-red">о</span>зите <button class="tts-btn" onclick="speakRussian('вы привозите')">🔊</button></td>
+          <td>привез<span class="accent-red">ёте</span> <button class="tts-btn" onclick="speakRussian('вы привезёте')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>они</b></td>
+          <td>прив<span class="accent-red">о</span>зят <button class="tts-btn" onclick="speakRussian('они привозят')">🔊</button></td>
+          <td>привез<span class="accent-red">ут</span> <button class="tts-btn" onclick="speakRussian('они привезут')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>過去形 (男)</b></td>
+          <td>привоз<span class="accent-red">ил</span> <button class="tts-btn" onclick="speakRussian('он привозил')">🔊</button></td>
+          <td>прив<span class="accent-red">ёз</span> (<b>※ л 脱落！</b>) <button class="tts-btn" onclick="speakRussian('он привёз')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>過去形 (女)</b></td>
+          <td>привоз<span class="accent-red">ила</span> <button class="tts-btn" onclick="speakRussian('она привозила')">🔊</button></td>
+          <td>привезл<span class="accent-red">а</span> (語尾移動！) <button class="tts-btn" onclick="speakRussian('она привезла')">🔊</button></td>
+        </tr>
+        <tr>
+          <td><b>過去形 (複)</b></td>
+          <td>привоз<span class="accent-red">или</span> <button class="tts-btn" onclick="speakRussian('они привозили')">🔊</button></td>
+          <td>привезл<span class="accent-red">и</span> (語尾移動！) <button class="tts-btn" onclick="speakRussian('они привезли')">🔊</button></td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🏢 重要単語の急所: оборудование & путь</div>
+      <div style="font-size:0.92rem; line-height:1.7;">
+        ・<b>оборудование (設備・機材)</b> <button class="tts-btn" onclick="speakRussian('оборудование')">🔊</button>:<br>
+        　- 英語の <code>equipment</code> と同じ集合名詞（常に単数中性扱い）。<br>
+        　- アクセントは第3音節の <b>-у́-</b>（обо-ру́-до-ва-ни-е）。先生が何度も発音をチェックされた単語！<br><br>
+        ・<b>путь (道 / Млечный Путь: 天の川)</b> <button class="tts-btn" onclick="speakRussian('Млечный Путь, на Млечном Пути')">🔊</button>:<br>
+        　- <b>男性名詞</b>であるにもかかわらず、生格・与格・前置格の語尾がすべて <b>-и</b> になる不規則変化！<br>
+        　- 「天の川で」＝ <span class="ru-chip">на Млечном Пути</span>（※ Путе とは絶対にならない）。
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: ANKI CARDS EXPLORER -->
+  <div id="tab-anki" class="tab-pane">
+    <div class="card">
+      <div class="card-title">🗂️ 本日登録された Anki カード（全37枚・音声付）</div>
+      <p style="font-size:0.92rem; color:var(--text-muted); margin-bottom:12px;">
+        追加分13枚を含め、全37枚が Anki（`02.Russian::ロシア語レッスン2`）および AnkiWeb クラウドに完全同期されています。各カードの 🔊 を押すと即座に音声を確認できます。
+      </p>
+      <input type="text" id="anki-search" placeholder="単語や日本語訳で検索..." onkeyup="filterCards()" style="width:100%; padding:10px 14px; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; margin-bottom:14px;">
+      
+      <div class="card-grid" id="cards-grid">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Global Speech Rate
+let currentSpeechRate = 0.9;
+
+function setSpeed(rate, el) {
+  currentSpeechRate = rate;
+  document.querySelectorAll('.speed-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Robust TTS Function with Web Speech API
+function speakRussian(text, btnElement = null) {
+  if (!('speechSynthesis' in window)) {
+    alert('お使いのブラウザは音声合成に対応していません');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  
+  const clean = text.replace(/<[^>]*>/g, '').trim();
+  const utter = new SpeechSynthesisUtterance(clean);
+  utter.lang = 'ru-RU';
+  utter.rate = currentSpeechRate;
+
+  const voices = window.speechSynthesis.getVoices();
+  const ruVoice = voices.find(v => v.lang.startsWith('ru') || v.name.toLowerCase().includes('russian'));
+  if (ruVoice) {
+    utter.voice = ruVoice;
+  }
+
+  if (btnElement) {
+    btnElement.classList.add('playing');
+    utter.onend = () => btnElement.classList.remove('playing');
+    utter.onerror = () => btnElement.classList.remove('playing');
+  }
+
+  window.speechSynthesis.speak(utter);
+}
+
+// Tab Switching
+function switchTab(tabId, el) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  el.classList.add('active');
+}
+
+// Render Deep Tanabata Reader
+function renderTanabata(sentences) {
+  const container = document.getElementById('tanabata-list');
+  container.innerHTML = sentences.map(s => `
+    <div class="sentence-block">
+      <div class="sentence-header">
+        <div class="rus-text-lg ru-text">${s.rus}</div>
+        <button class="tts-btn" onclick="speakRussian('${s.rus.replace(/'/g, "\\'")}', this)" title="この文を再生">🔊</button>
+      </div>
+      <div class="jp-text">${s.jp}</div>
+      
+      <!-- 1. Word Breakdown -->
+      ${s.words && s.words.length ? `
+        <div class="section-label section-label-blue">📖 単語・語彙の完全分解 (Word Breakdown)</div>
+        <div class="words-grid">
+          ${s.words.map(w => `
+            <div class="word-card">
+              <div class="word-top">
+                <span class="word-ru ru-text">${w.w}</span>
+                <span class="word-pos">${w.pos}</span>
+                <button class="tts-btn" onclick="speakRussian('${w.w.replace(/'/g, "\\'")}', this)" style="width:22px; height:22px; font-size:0.72rem;">🔊</button>
+              </div>
+              <div class="word-desc">${w.desc}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+
+      <!-- 2. Grammar Breakdown -->
+      <div class="section-label section-label-purple">🔍 文法・構文の急所 (Grammar & Syntax)</div>
+      <div class="grammar-box-deep">${s.grammar}</div>
+
+      <!-- 3. Derivation / Learning Network -->
+      ${s.derivation && s.derivation.length ? `
+        <div class="section-label section-label-green">🌱 学びの派生・発展パターン (Derivation & Network)</div>
+        <div class="derivation-box">
+          <ul>
+            ${s.derivation.map(d => `<li>${d}</li>`).join('')}
+          </ul>
+        </div>
+      ` : ''}
+
+      <!-- 4. Dialog Simulation -->
+      ${s.dialog ? `
+        <div class="section-label section-label-pink">🎙️ アナスタシア先生との対話再現＆満点の返し</div>
+        <div class="dialog-box">
+          <div style="margin-bottom:6px;">
+            <b>先生</b>: <span class="ru-text">${s.dialog.teacher}</span>
+            <button class="tts-btn" onclick="speakRussian('${s.dialog.teacher.replace(/'/g, "\\'")}', this)" style="width:24px; height:24px; font-size:0.75rem;">🔊</button>
+          </div>
+          <div>
+            <b>🌟 理想の返し</b>: <span class="ru-text">${s.dialog.student}</span>
+            <button class="tts-btn" onclick="speakRussian('${s.dialog.student.replace(/'/g, "\\'")}', this)" style="width:24px; height:24px; font-size:0.75rem;">🔊</button>
+          </div>
+        </div>
+      ` : ''}
+
+    </div>
+  `).join('');
+}
+
+// Render Quiz
+function renderQuiz(quizList) {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = quizList.map((item, qIdx) => `
+    <div class="quiz-item" id="q-item-${qIdx}">
+      <div class="quiz-q-row">
+        <div class="quiz-q ru-text">${item.q}</div>
+        <button class="tts-btn" onclick="speakRussian('${item.q.replace(/___/g, '').replace(/'/g, "\\'")}', this)" title="問題文を聴く">🔊</button>
+      </div>
+      <div class="quiz-options">
+        ${item.options.map((opt, optIdx) => `
+          <button class="quiz-btn ru-text" onclick="checkAnswer(${qIdx}, ${optIdx})">
+            <span>${opt}</span>
+            <span class="tts-btn" onclick="event.stopPropagation(); speakRussian('${opt.replace(/'/g, "\\'")}', this)" style="width:26px; height:26px; font-size:0.78rem;">🔊</span>
+          </button>
+        `).join('')}
+      </div>
+      <div class="quiz-feedback" id="fb-${qIdx}"></div>
+    </div>
+  `).join('');
+}
+
+let activeQuizData = [];
+
+function checkAnswer(qIdx, selectedOptIdx) {
+  const item = activeQuizData[qIdx];
+  const qElem = document.getElementById(`q-item-${qIdx}`);
+  const buttons = qElem.querySelectorAll('.quiz-btn');
+  const fb = document.getElementById(`fb-${qIdx}`);
+  
+  buttons.forEach(b => b.disabled = true);
+  
+  if (selectedOptIdx === item.correct) {
+    buttons[selectedOptIdx].classList.add('correct');
+    fb.style.display = 'block';
+    fb.style.background = '#dcfce7';
+    fb.style.border = '1px solid #86efac';
+    fb.style.color = '#15803d';
+    fb.innerHTML = `🎉 <b>正解！</b><br>${item.exp}`;
+  } else {
+    buttons[selectedOptIdx].classList.add('wrong');
+    buttons[item.correct].classList.add('correct');
+    fb.style.display = 'block';
+    fb.style.background = '#fee2e2';
+    fb.style.border = '1px solid #fca5a5';
+    fb.style.color = '#991b1b';
+    fb.innerHTML = `❌ <b>惜しい！</b><br>${item.exp}`;
+  }
+}
+
+// All 37 Cards
+const ALL_37_CARDS = [
+  { rus: "привозить / привезти", eng: "（乗り物で）運んでくる・持ってくる [+対格, +из/с生格]" },
+  { rus: "привозить", eng: "（乗り物で）運んでくる・持ってくる・連れてくる [+対格, +из/с]" },
+  { rus: "привезти", eng: "（乗り物で）運んでくる・持ってくる・連れてくる [+対格, +из/с生格]" },
+  { rus: "я привожу, ты привозишь", eng: "私は運んでくる、君は運んでくる [現在: яは-у, 2人称以降は語幹-о-固定]" },
+  { rus: "я привезу, ты привезёшь", eng: "私は運んでくるだろう、君は運んでくるだろう [未来: 語尾-ё-固定 / 過去: привёз]" },
+  { rus: "Папа регулярно привозит мне книги из деревни.", eng: "父は定期的に村から私に本を運んできてくれます。" },
+  { rus: "Они часто привозят с дачи свежие овощи и ягоды.", eng: "彼らは頻繁に別荘（ダチャ）から新鮮な野菜や果物を運んできます。" },
+  { rus: "Завтра курьер привезёт нам важные документы прямо в офис.", eng: "明日、配達員が私たちに重要書類を届けてくれる予定です。" },
+  { rus: "Друзья обещали привезти редкие сувениры из поездки.", eng: "友人たちは旅行から珍しいお土産を持ち帰ると約束しました。" },
+  { rus: "Мы каждый год привозим из отпуска много фотографий и подарков.", eng: "私たちは毎年、休暇から多くの写真とお土産を持ち帰ります。" },
+  { rus: "Вчера рабочие привезли всё необходимое для ремонта.", eng: "昨日、作業員たちがリフォームに必要なすべてを運んできました。" },
+  { rus: "Машина уже привезла новое оборудование на склад.", eng: "トラックがすでに新しい設備を倉庫に運んできました。" },
+  { rus: "оборудование", eng: "設備・機材・装置 (中性名詞・集合名詞・常に単数扱い)" },
+  { rus: "всё необходимое", eng: "必要なすべてのもの・一切の必需品 [+для 生格: 〜のための]" },
+  { rus: "Мой любимый японский праздник — Танабата.", eng: "私の大好きな日本の祝祭は七夕です。" },
+  { rus: "символизировать", eng: "象徴する・表している [+対格: 愛・希望・願いの成就などを]" },
+  { rus: "исполнение желаний", eng: "願いの成就・夢の実現 (中性名詞 + 生格複数)" },
+  { rus: "отмечать праздник седьмого июля", eng: "7月7日に祝祭（記念日）を祝う [+生格: 日付]" },
+  { rus: "связано с древней легендой", eng: "古代の伝説に結びついている・由来している [связан + с 造格]" },
+  { rus: "согласно этой легенде", eng: "この伝説によれば・伝説に従えば [согласно + 与格]" },
+  { rus: "были влюблены друг в друга", eng: "お互いに恋していた・互いに愛し合っていた [друг в друга]" },
+  { rus: "Млечный Путь", eng: "天の川・銀河系 (男性名詞) [на Млечном Пути: 天の川で]" },
+  { rus: "вешать листочки на ветки бамбука", eng: "（短冊の）紙片を竹の枝に吊るす [+対格, +на対格]" },
+  { rus: "украшать цветными декорациями", eng: "色とりどりの飾りで装飾する [+対格, +造格]" },
+  { rus: "праздник проходит в августе", eng: "祝祭（お祭り）は8月に開催される・催される [+в前置格]" },
+  { rus: "из-за своей любви перестали работать", eng: "愛のせいで働くのをやめた [из-за + 生格, перестать + 不定詞]" },
+  { rus: "разрешил им встречаться один раз в году", eng: "年に1度だけ会うことを許した [разрешить + 与格 + 不定詞]" },
+  { rus: "Считается, что...", eng: "〜と考えられている・〜と信じられている [客観的見解]" },
+  { rus: "появился благодаря китайской традиции", eng: "中国の伝統のおかげで伝来した [благодаря + 与格]" },
+  { rus: "со временем", eng: "時が経つにつれて・やがて・次第に (時間副詞句)" },
+  { rus: "писать желания на листочках бумаги", eng: "紙片（短冊）に願い事を書く [+на前置格, +対格]" },
+  { rus: "не только..., но и...", eng: "〜だけでなく、〜もまた (相関接続詞構文)" },
+  { rus: "Дети и взрослые надеются, что их желания исполнятся.", eng: "子どもも大人も、自分の願いが叶うことを望んでいます。" },
+  { rus: "надевать традиционную одежду", eng: "伝統的な衣装（服）を着る・身につける [+対格]" },
+  { rus: "напоминать людям, что...", eng: "人々に〜を思い出させる [напоминать + 与格, что...]" },
+  { rus: "верить в свои желания", eng: "自分の願いを信じる・夢を信じる [верить в + 対格]" },
+  { rus: "радоваться лету", eng: "夏を喜ぶ・夏の訪れを楽しむ [радоваться + 与格]" }
+];
+
+function renderCards(filterText = '') {
+  const grid = document.getElementById('cards-grid');
+  const filtered = ALL_37_CARDS.filter(c => 
+    c.rus.toLowerCase().includes(filterText.toLowerCase()) || 
+    c.eng.toLowerCase().includes(filterText.toLowerCase())
+  );
+  grid.innerHTML = filtered.map(c => `
+    <div class="flashcard-mini" onclick="speakRussian('${c.rus.replace(/'/g, "\\'")}')">
+      <div class="fc-top">
+        <div class="fc-rus ru-text">${c.rus}</div>
+        <button class="tts-btn" onclick="event.stopPropagation(); speakRussian('${c.rus.replace(/'/g, "\\'")}', this)" title="音声を聴く">🔊</button>
+      </div>
+      <div class="fc-eng">${c.eng}</div>
+    </div>
+  `).join('');
+}
+
+function filterCards() {
+  const query = document.getElementById('anki-search').value;
+  renderCards(query);
+}
+
+// Dynamic Load Lesson Data
+async function loadLesson(lessonId) {
+  try {
+    const res = await fetch(`data/lesson_${lessonId}.json`);
+    if (!res.ok) throw new Error('Fetch failed');
+    const data = await res.json();
+    
+    document.getElementById('header-badge-date').textContent = `${data.date} レッスン`;
+    document.getElementById('header-badge-teacher').textContent = `担当: ${data.teacher}`;
+    document.getElementById('header-title').textContent = data.title;
+    
+    activeQuizData = data.quiz;
+    renderTanabata(data.tanabata_sentences);
+    renderQuiz(data.quiz);
+  } catch (err) {
+    console.error('Fetch error:', err);
+  }
+}
+
+function changeLesson(val) {
+  loadLesson(val);
+}
+
+// Init
+loadLesson('20261008');
+renderCards();
+</script>
+
+</body>
+</html>
