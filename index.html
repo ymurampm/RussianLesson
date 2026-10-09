@@ -382,6 +382,192 @@
   .fc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
   .fc-rus { font-weight: 700; color: #0f172a; font-size: 1.02rem; padding-right: 6px; }
   .fc-eng { font-size: 0.88rem; color: #475569; }
+
+  /* Smooth Scroll & Navigation Focus */
+  html { scroll-behavior: smooth; }
+  .sentence-block, .quiz-item, .card, .flashcard-mini {
+    scroll-margin-top: 85px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    cursor: pointer;
+  }
+
+  /* Active Nav Item Focus State (j/k navigation) */
+  .nav-focused {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35), 0 8px 24px rgba(37, 99, 235, 0.18) !important;
+    transform: translateY(-2px);
+    position: relative;
+    z-index: 10;
+  }
+  .sentence-block.nav-focused {
+    border-left-color: #1d4ed8 !important;
+    border-left-width: 8px !important;
+  }
+  .quiz-item.nav-focused {
+    border-left: 6px solid #2563eb !important;
+  }
+  .flashcard-mini.nav-focused {
+    background: #eff6ff !important;
+    border-color: #3b82f6 !important;
+  }
+
+  /* Audio Play Flash Effect (r key trigger) */
+  @keyframes audioPulseRing {
+    0% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0.6), 0 0 0 3px rgba(37, 99, 235, 0.35); }
+    50% { box-shadow: 0 0 0 12px rgba(29, 78, 216, 0), 0 0 0 4px rgba(37, 99, 235, 0.5); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 78, 216, 0), 0 0 0 3px rgba(37, 99, 235, 0.35); }
+  }
+  .audio-flash {
+    animation: audioPulseRing 0.8s ease-out;
+  }
+
+  /* Floating Keyboard Shortcut HUD (PC) */
+  .kbd-guide {
+    position: fixed;
+    bottom: 18px;
+    right: 20px;
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #f8fafc;
+    padding: 8px 14px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: all 0.2s ease;
+  }
+  .kbd-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #cbd5e1;
+    font-weight: 500;
+  }
+  kbd {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .kbd-counter {
+    background: #1e40af;
+    color: #eff6ff;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    border: 1px solid rgba(147, 197, 253, 0.4);
+  }
+  .kbd-help-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #f8fafc;
+    padding: 3px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.76rem;
+    font-weight: 600;
+    transition: all 0.15s ease;
+  }
+  .kbd-help-btn:hover {
+    background: rgba(255,255,255,0.28);
+  }
+
+  /* Modal Overlay for Shortcut Help */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open {
+    display: flex;
+  }
+  .modal-content {
+    background: white;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    position: relative;
+    animation: modalPop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes modalPop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .modal-header h3 {
+    font-size: 1.18rem;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    line-height: 1;
+  }
+  .shortcut-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.92rem;
+  }
+  .shortcut-row:last-child {
+    border-bottom: none;
+  }
+  .shortcut-keys {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .shortcut-keys kbd {
+    background: #f1f5f9;
+    color: #0f172a;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  }
+
+  @media (max-width: 640px) {
+    .kbd-guide {
+      display: none;
+    }
+  }
 </style>
 </head>
 <body>
@@ -496,6 +682,8 @@ function renderLesson(data) {
       ${renderTabPaneContent(tab, data)}
     </div>
   `).join('');
+
+  resetNavFocus();
 }
 
 function renderTabPaneContent(tab, data) {
@@ -518,6 +706,7 @@ function switchTab(tabId, el) {
   const targetPane = document.getElementById(tabId);
   if (targetPane) targetPane.classList.add('active');
   if (el) el.classList.add('active');
+  resetNavFocus();
 }
 
 // Pane Renderers
@@ -689,7 +878,248 @@ function filterCards() {
     c.eng.toLowerCase().includes(query)
   );
   document.getElementById('cards-grid').innerHTML = renderCardGridItems(filtered);
+  resetNavFocus();
 }
+
+// ==========================================
+// Keyboard Navigation Engine (Vim-Style j/k/r)
+// ==========================================
+let currentNavIndex = 0;
+
+function getNavigableItems() {
+  const activePane = document.querySelector('.tab-pane.active');
+  if (!activePane) return [];
+  const selectors = ['.sentence-block', '.quiz-item', '.flashcard-mini', '.card'];
+  for (const s of selectors) {
+    const items = Array.from(activePane.querySelectorAll(s));
+    if (items.length > 0) return items;
+  }
+  return [];
+}
+
+function updateNavFocus(newIndex, scroll = true) {
+  const items = getNavigableItems();
+  const counter = document.getElementById('kbd-item-counter');
+  
+  if (items.length === 0) {
+    currentNavIndex = -1;
+    if (counter) counter.style.display = 'none';
+    return;
+  }
+  
+  if (newIndex < 0) newIndex = 0;
+  if (newIndex >= items.length) newIndex = items.length - 1;
+  currentNavIndex = newIndex;
+
+  items.forEach((item, idx) => {
+    if (idx === currentNavIndex) {
+      item.classList.add('nav-focused');
+      if (scroll) {
+        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    } else {
+      item.classList.remove('nav-focused');
+    }
+  });
+
+  if (counter) {
+    counter.style.display = 'inline-block';
+    counter.textContent = `${currentNavIndex + 1} / ${items.length}`;
+  }
+}
+
+function resetNavFocus() {
+  currentNavIndex = 0;
+  setTimeout(() => {
+    updateNavFocus(0, false);
+  }, 40);
+}
+
+function playAudioForCurrentItem() {
+  const items = getNavigableItems();
+  if (items.length === 0) return;
+  if (currentNavIndex < 0 || currentNavIndex >= items.length) {
+    updateNavFocus(0, true);
+  }
+  const item = items[currentNavIndex];
+  if (!item) return;
+
+  // Visual pulse feedback on active card
+  item.classList.remove('audio-flash');
+  void item.offsetWidth; // trigger reflow
+  item.classList.add('audio-flash');
+  setTimeout(() => item.classList.remove('audio-flash'), 1000);
+
+  // 1. Reader pane: main sentence
+  const ruSentence = item.querySelector('.rus-text-lg');
+  if (ruSentence) {
+    const btn = item.querySelector('.sentence-header .tts-btn');
+    speakRussian(ruSentence.textContent, btn);
+    return;
+  }
+
+  // 2. Quiz pane: question sentence
+  const quizQ = item.querySelector('.quiz-q');
+  if (quizQ) {
+    const btn = item.querySelector('.quiz-q-row .tts-btn');
+    speakRussian(quizQ.textContent.replace(/___/g, ''), btn);
+    return;
+  }
+
+  // 3. Anki pane: Russian flashcard front
+  const fcRus = item.querySelector('.fc-rus');
+  if (fcRus) {
+    const btn = item.querySelector('.tts-btn');
+    speakRussian(fcRus.textContent, btn);
+    return;
+  }
+
+  // 4. Cheatsheet / other cards: Russian chip or existing TTS button
+  const ttsBtn = item.querySelector('.tts-btn');
+  if (ttsBtn) {
+    ttsBtn.click();
+    return;
+  }
+  const ruChip = item.querySelector('.ru-chip');
+  if (ruChip) {
+    speakRussian(ruChip.textContent);
+    return;
+  }
+}
+
+function answerCurrentQuiz(optionIdx) {
+  const items = getNavigableItems();
+  if (currentNavIndex < 0 || currentNavIndex >= items.length) return false;
+  const item = items[currentNavIndex];
+  if (!item || !item.classList.contains('quiz-item')) return false;
+
+  const buttons = item.querySelectorAll('.quiz-btn');
+  if (buttons[optionIdx] && !buttons[optionIdx].disabled) {
+    buttons[optionIdx].click();
+    return true;
+  }
+  return false;
+}
+
+function switchTabRelative(delta) {
+  const tabBtns = Array.from(document.querySelectorAll('.tab-btn'));
+  if (tabBtns.length === 0) return;
+  const activeIdx = tabBtns.findIndex(b => b.classList.contains('active'));
+  let newIdx = (activeIdx + delta + tabBtns.length) % tabBtns.length;
+  tabBtns[newIdx].click();
+}
+
+function switchTabByIndex(idx) {
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  if (idx >= 0 && idx < tabBtns.length) {
+    tabBtns[idx].click();
+  }
+}
+
+function toggleShortcutsModal() {
+  const modal = document.getElementById('shortcutsModal');
+  if (modal) {
+    modal.classList.toggle('open');
+  }
+}
+
+function closeShortcutsModal() {
+  const modal = document.getElementById('shortcutsModal');
+  if (modal) {
+    modal.classList.remove('open');
+  }
+}
+
+// Global Keydown Listener
+window.addEventListener('keydown', (e) => {
+  const activeTag = document.activeElement ? document.activeElement.tagName.toLowerCase() : '';
+  if (activeTag === 'input' || activeTag === 'textarea' || (document.activeElement && document.activeElement.isContentEditable)) {
+    if (e.key === 'Escape') {
+      document.activeElement.blur();
+    }
+    return; // Don't intercept while typing in search or text input
+  }
+
+  // Modal triggers
+  if (e.key === '?' || (e.shiftKey && e.key === '/')) {
+    e.preventDefault();
+    toggleShortcutsModal();
+    return;
+  }
+  if (e.key === 'Escape') {
+    closeShortcutsModal();
+    return;
+  }
+
+  // Don't intercept system shortcuts (Ctrl+R, Ctrl+C, Cmd+R, etc.)
+  if (e.ctrlKey || e.metaKey) {
+    return;
+  }
+
+  const code = e.code;
+  const key = e.key.toLowerCase();
+
+  // Next item: j, ArrowDown, Russian 'о'
+  if (code === 'KeyJ' || key === 'j' || key === 'о' || key === 'arrowdown') {
+    e.preventDefault();
+    updateNavFocus(currentNavIndex + 1, true);
+    return;
+  }
+
+  // Prev item: k, ArrowUp, Russian 'л'
+  if (code === 'KeyK' || key === 'k' || key === 'л' || key === 'arrowup') {
+    e.preventDefault();
+    updateNavFocus(currentNavIndex - 1, true);
+    return;
+  }
+
+  // Audio Playback: r, Russian 'к'
+  if (code === 'KeyR' || key === 'r' || key === 'к') {
+    e.preventDefault();
+    playAudioForCurrentItem();
+    return;
+  }
+
+  // Relative tab switch: [ and ] (Russian 'х' and 'ъ')
+  if (code === 'BracketLeft' || key === '[' || key === 'х') {
+    e.preventDefault();
+    switchTabRelative(-1);
+    return;
+  }
+  if (code === 'BracketRight' || key === ']' || key === 'ъ') {
+    e.preventDefault();
+    switchTabRelative(1);
+    return;
+  }
+
+  // Quiz answering: a / b / c or Russian а, б, в
+  if (code === 'KeyA' || key === 'a' || key === 'а') {
+    if (answerCurrentQuiz(0)) { e.preventDefault(); return; }
+  }
+  if (code === 'KeyB' || key === 'b' || key === 'б') {
+    if (answerCurrentQuiz(1)) { e.preventDefault(); return; }
+  }
+  if (code === 'KeyC' || key === 'c' || key === 'в') {
+    if (answerCurrentQuiz(2)) { e.preventDefault(); return; }
+  }
+
+  // Number keys 1, 2, 3, 4
+  if (['1', '2', '3', '4'].includes(key)) {
+    const num = parseInt(key, 10);
+    const items = getNavigableItems();
+    const curr = items[currentNavIndex];
+    if (curr && curr.classList.contains('quiz-item') && num <= 3) {
+      if (answerCurrentQuiz(num - 1)) {
+        e.preventDefault();
+        return;
+      }
+    }
+    // Switch tab
+    e.preventDefault();
+    switchTabByIndex(num - 1);
+    return;
+  }
+});
 
 // Load Lesson Data via Fetch with Dynamic Fallback
 async function loadLesson(lessonId) {
@@ -710,11 +1140,76 @@ function changeLesson(val) {
   loadLesson(val);
 }
 
-// Initial Load
+// Initial Load & Event Delegation
 document.addEventListener('DOMContentLoaded', () => {
+  const contentArea = document.getElementById('tab-content-area');
+  if (contentArea) {
+    contentArea.addEventListener('click', (e) => {
+      const item = e.target.closest('.sentence-block, .quiz-item, .card, .flashcard-mini');
+      if (!item) return;
+      const items = getNavigableItems();
+      const idx = items.indexOf(item);
+      if (idx !== -1) {
+        updateNavFocus(idx, false);
+      }
+    });
+  }
   loadLesson('20261008');
 });
 </script>
+
+<!-- Floating Keyboard Shortcuts HUD (PC) -->
+<div class="kbd-guide" id="kbdGuide">
+  <span class="kbd-badge"><kbd>j</kbd> 次へ</span>
+  <span class="kbd-badge"><kbd>k</kbd> 前へ</span>
+  <span class="kbd-badge"><kbd>r</kbd> 音声 🔊</span>
+  <span class="kbd-badge"><kbd>[</kbd> / <kbd>]</kbd> タブ切替</span>
+  <span class="kbd-counter" id="kbd-item-counter">1 / 15</span>
+  <button class="kbd-help-btn" onclick="toggleShortcutsModal()" title="全ショートカット一覧 (?)">⌨️ ヘルプ</button>
+</div>
+
+<!-- Shortcuts Help Modal -->
+<div class="modal-overlay" id="shortcutsModal" onclick="if(event.target === this) toggleShortcutsModal()">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>⌨️ キーボードショートカット一覧</h3>
+      <button class="modal-close" onclick="toggleShortcutsModal()" title="閉じる (Esc)">×</button>
+    </div>
+    <div>
+      <div class="shortcut-row">
+        <span>次の項目へ進む</span>
+        <div class="shortcut-keys"><kbd>j</kbd> または <kbd>↓</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>前の項目へ戻る</span>
+        <div class="shortcut-keys"><kbd>k</kbd> または <kbd>↑</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>ロシア語音声を再生 🔊</span>
+        <div class="shortcut-keys"><kbd>r</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>前 / 次のタブへ移動</span>
+        <div class="shortcut-keys"><kbd>[</kbd> / <kbd>]</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>タブを直接番号で切替</span>
+        <div class="shortcut-keys"><kbd>1</kbd> 〜 <kbd>4</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>クイズ選択肢を回答</span>
+        <div class="shortcut-keys"><kbd>1</kbd>〜<kbd>3</kbd> / <kbd>a</kbd><kbd>b</kbd><kbd>c</kbd></div>
+      </div>
+      <div class="shortcut-row">
+        <span>ヘルプを表示 / 閉じる</span>
+        <div class="shortcut-keys"><kbd>?</kbd> / <kbd>Esc</kbd></div>
+      </div>
+    </div>
+    <div style="margin-top:14px; font-size:0.8rem; color:#64748b; text-align:right;">
+      ※ ロシア語入力配列のまま（о, л, к など）でも快適に操作可能です
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
