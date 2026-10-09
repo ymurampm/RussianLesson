@@ -385,6 +385,7 @@
 
   /* Smooth Scroll & Navigation Focus */
   html { scroll-behavior: smooth; }
+  #tab-content-area { padding-bottom: 60vh; }
   .sentence-block, .quiz-item, .card, .flashcard-mini {
     scroll-margin-top: 85px;
     transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
@@ -897,6 +898,18 @@ function getNavigableItems() {
   return [];
 }
 
+function scrollToItem(item) {
+  const tabNav = document.querySelector('.tab-nav');
+  const navHeight = tabNav ? tabNav.offsetHeight : 55;
+  const itemTop = item.getBoundingClientRect().top + window.scrollY;
+  const topPadding = 16; // spacing between sticky nav and card top
+  
+  window.scrollTo({
+    top: Math.max(0, itemTop - navHeight - topPadding),
+    behavior: 'smooth'
+  });
+}
+
 function updateNavFocus(newIndex, scroll = true) {
   const items = getNavigableItems();
   const counter = document.getElementById('kbd-item-counter');
@@ -915,7 +928,7 @@ function updateNavFocus(newIndex, scroll = true) {
     if (idx === currentNavIndex) {
       item.classList.add('nav-focused');
       if (scroll) {
-        item.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollToItem(item);
       }
     } else {
       item.classList.remove('nav-focused');
