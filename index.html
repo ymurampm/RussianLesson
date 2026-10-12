@@ -631,7 +631,8 @@ function speakRussian(text, btnElement = null) {
   }
   window.speechSynthesis.cancel();
   
-  const clean = text.replace(/<[^>]*>/g, '').trim();
+  // Remove HTML tags, bracketed hints [...], and parenthesized hints (...) so TTS only pronounces pure Russian
+  const clean = text.replace(/<[^>]*>/g, '').replace(/\[[^\]]*\]/g, '').replace(/\([^)]*\)/g, '').trim();
   const utter = new SpeechSynthesisUtterance(clean);
   utter.lang = 'ru-RU';
   utter.rate = currentSpeechRate;
